@@ -316,20 +316,20 @@ fun InputsForm(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownTipOCel() {
-    val options = listOf("Whatzapp", "Fixo", "Celular")
+    val options = listOf("Selecione","Telefone Fixo", "Celular", "Whatsapp")
     var expanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf("") }
+    var selectedOptionText by remember { mutableStateOf(options[0]) }
+
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
     ) {
         TextField(
-            // The `menuAnchor` modifier must be passed to the text field for correctness.
-            modifier = Modifier.menuAnchor(),
+            modifier = Modifier.menuAnchor().padding(horizontal = 16.dp),
+            readOnly = true,
             value = selectedOptionText,
-            onValueChange = { selectedOptionText = it },
-            readOnly = false //*vai ser necessário posteriormente
-            ,label = { Text("Selecione o Tipo") },
+            onValueChange = {},
+            label = { Text("Tipo de Telefone") },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(
                 containerColor = Color(19, 19, 19, 255),
@@ -346,26 +346,21 @@ fun DropdownTipOCel() {
 
                 focusedLabelColor = Color(254, 254, 254, 255),
                 unfocusedLabelColor = Color(254, 254, 254, 255)
-            ),
-
+            )
         )
-        // filter options based on text field value
-        val filteringOptions = options.filter { it.contains(selectedOptionText, ignoreCase = true) }
-        if (filteringOptions.isNotEmpty()) {
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-            ) {
-                filteringOptions.forEach { selectionOption ->
-                    DropdownMenuItem(
-                        text = { Text(selectionOption) },
-                        onClick = {
-                            selectedOptionText = selectionOption
-                            expanded = false
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                    )
-                }
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            options.forEach { selectionOption ->
+                DropdownMenuItem(
+                    text = { Text(selectionOption) },
+                    onClick = {
+                        selectedOptionText = selectionOption
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                )
             }
         }
     }
